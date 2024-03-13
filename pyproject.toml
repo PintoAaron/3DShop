@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "3dshop"
+version = "0.1.0"
+description = ""
+authors = ["pinto <aaronpinto111@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+python-dotenv = "^1.0.1"
+fastapi = "^0.110.0"
+alembic = "^1.13.1"
+uvicorn = "^0.28.0"
+sqlalchemy = "^2.0.28"
+pydantic = {extras = ["email"], version = "^2.6.3"}
+pydantic-settings = "^2.2.1"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+psycopg2-binary = "^2.9.9"
+celery = "^5.3.6"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
