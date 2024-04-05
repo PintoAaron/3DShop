@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "3dshop"
+version = "0.1.0"
+description = ""
+authors = ["Pinto Tetteh Aaron <aaronpinto111@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.110.1"
+alembic = "^1.13.1"
+pydantic = "^2.6.4"
+pydantic-settings = "^2.2.1"
+flake8 = "^7.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
