@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from core import setup as db_setup
 
 from config import setting
 
@@ -21,6 +22,7 @@ class AppBuilder():
         pass
     
     
+    
     def register_middlewares(self):
         self._app.add_middleware(
             CORSMiddleware,
@@ -31,8 +33,10 @@ class AppBuilder():
         )
         
         
-    def register_databases(self):
-        pass
+    def register_databases(self) -> None:
+        db_setup.Base.metadata.create_all(
+            bind = db_setup.db.get_engine()
+        )
     
     
     def get_app(self):
