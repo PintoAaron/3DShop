@@ -9,6 +9,7 @@ class AppSettings(BaseSettings):
     API_DESCRIPTION :str = "API for an imaginary 3D shop"
     API_PREFIX :str = "/api/v1"
     DATABASE_URL :str = ""
+    KAFKA_BOOTSTRAP_SERVER :str = "localhost:9092"
     
     
     class Config:

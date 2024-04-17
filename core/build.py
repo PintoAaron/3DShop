@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, responses
 from fastapi.middleware.cors import CORSMiddleware
 from core import setup as db_setup
 
@@ -15,8 +15,11 @@ class AppBuilder():
         
     
     def register_routes(self):
-        pass
-    
+        @self._app.get("/",include_in_schema=False)
+        def _index():
+            return responses.RedirectResponse(url="/docs")
+        
+        
     
     def register_exceptions(self):
         pass
