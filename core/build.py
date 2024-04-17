@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, responses
 from fastapi.middleware.cors import CORSMiddleware
+from core import setup as db_setup
 
 from config import setting
 
@@ -14,11 +15,15 @@ class AppBuilder():
         
     
     def register_routes(self):
-        pass
-    
+        @self._app.get("/",include_in_schema=False)
+        def _index():
+            return responses.RedirectResponse(url="/docs")
+        
+        
     
     def register_exceptions(self):
         pass
+    
     
     
     def register_middlewares(self):
@@ -31,8 +36,10 @@ class AppBuilder():
         )
         
         
-    def register_databases(self):
-        pass
+    def register_databases(self) -> None:
+        db_setup.Base.metadata.create_all(
+            bind = db_setup.db.get_engine()
+        )
     
     
     def get_app(self):
