@@ -12,6 +12,7 @@ alembic = "^1.13.1"
 pydantic = "^2.6.4"
 pydantic-settings = "^2.2.1"
 flake8 = "^7.0.0"
+uvicorn = "^0.29.0"
 
 
 [build-system]
