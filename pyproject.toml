@@ -14,6 +14,8 @@ pydantic-settings = "^2.2.1"
 flake8 = "^7.0.0"
 uvicorn = "^0.29.0"
 kafka-python = "^2.0.2"
+bcrypt = "^4.1.2"
+passlib = {extras = ["cryptography"], version = "^1.7.4"}
 
 
 [build-system]

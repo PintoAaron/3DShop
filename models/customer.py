@@ -12,7 +12,8 @@ class Customers(db_setup.Base):
     id = Column(Integer, primary_key=True)
     name = Column(String,nullable=False)
     email = Column(String,nullable=False)
-    phone = Column(String,nullable=False)
+    phone = Column(String,nullable=True)
+    password = Column(String,nullable=False)
     orders = relationship('Orders',back_populates='customer')
     
     def __str__(self):
