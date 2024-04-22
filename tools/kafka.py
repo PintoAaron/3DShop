@@ -39,7 +39,7 @@ class KafkaStreamProducer:
     def __connect_to_kafka(cls):
         try:
             producer = KafkaProducer(
-                bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVER,
+                bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
                 value_serializer=lambda x: x.encode('utf-8')
             )
             
