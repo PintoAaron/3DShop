@@ -27,7 +27,7 @@ def login_keycloak_user(user: CustomerLogin):
     }
     try:
         response = requests.post(url, data=payload)
-        return response.json()
+        return response.json() if response.status_code == 200 else None
     except Exception as e:
         print(f"Error login_keycloak_user: {e}")        
         logger.error(f"Error login_keycloak_user: {e}")
@@ -41,10 +41,8 @@ def login_keycloak_admin():
     login admin user and use admin to perform operations
     
     """
-    print(settings.KEYCLOAK_URL)
     
-    url = f"{settings.KEYCLOAK_URL}/{settings.KEYCLOAK_REALM}/protocol/openid-connect/token"
-    print(url)
+    url = f"{settings.KEYCLOAK_URL}/realms/{settings.KEYCLOAK_REALM}/protocol/openid-connect/token"
     payload = {
         "client_id": settings.KEYCLOAK_CLIENT_ID,
         "client_secret": settings.KEYCLOAK_CLIENT_SECRET,
@@ -53,7 +51,6 @@ def login_keycloak_admin():
         "grant_type": "password"
     }
     
-    print(payload)
     
     try:
         response = requests.post(url, data=payload)
@@ -69,11 +66,6 @@ admin_token = login_keycloak_admin()
 access_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("expires_in", 0))
 refresh_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("refresh_expires_in", 0))
 
-print(admin_token)
-print("##################################")
-print(access_token_expire_date)
-print("##################################")
-print(refresh_token_expire_date)
 
 def refresh_user_token():
     
@@ -132,9 +124,13 @@ def register_keycloak_user(user: CustomerIn):
         "Authorization": f"Bearer {admin_token.get('access_token')}",
         "Content-Type": "application/json"
     }
+    
+    
     payload = {
         "username": user.email,
         "email": user.email,
+        "firstName": user.name,
+        "lastName": user.name,
         "enabled": True,
         "credentials": [
             {
@@ -147,8 +143,7 @@ def register_keycloak_user(user: CustomerIn):
     
     try:
         response = requests.post(url, headers=headers, json=payload)
-        print(response.json())
-        return response.status_code
+        return True if response.status_code == 201 else None
     except Exception as e:
         print(f"Error register_keycloak_user: {e}")
         logger.error(f"Error register_keycloak_user: {e}")

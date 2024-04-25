@@ -16,3 +16,9 @@ class CustomerLogin(BaseModel):
 
 class CustomerOut(BaseModel):
     token : str
+    
+    
+    
+class DbCustomer(BaseModel):
+    name: str
+    email: str

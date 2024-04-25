@@ -1,7 +1,7 @@
 from utils.session import DBSession
 from models.customer import Customers
 from sqlalchemy.exc import SQLAlchemyError
-from schemas.customer import CustomerIn
+from schemas.customer import CustomerIn, DbCustomer
 from tools.log import Log
 
 
@@ -19,7 +19,7 @@ def add_object_to_database(item: any) -> bool:
             db.rollback()
         
 
-def save_customer_to_db(customer: CustomerIn) -> bool:
+def save_customer_to_db(customer: DbCustomer) -> bool:
     user = Customers(**customer.dict())
     try:
         return add_object_to_database(user)
@@ -28,7 +28,7 @@ def save_customer_to_db(customer: CustomerIn) -> bool:
         return False
 
 
-def get_customer_by_email(email: str) -> Customers:
+def get_customer_by_email(email: str):
     try:
         with DBSession() as db:
             return db.query(Customers).filter(Customers.email == email).first()
