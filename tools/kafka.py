@@ -9,9 +9,8 @@ logger = Log(__name__)
 
 class KafkaStreamConsumer:
     
-    def __init__(self, topic: str, bootstap_server: str):
+    def __init__(self, topic: str=settings.KAFKA_TOPIC):
         self.topic = topic
-        self.bootstap_server = bootstap_server
         
         
     def consume_data_from_topic(self, callback_func):
@@ -22,7 +21,7 @@ class KafkaStreamConsumer:
         
         consumer = KafkaConsumer(
             self.topic,
-            bootstrap_servers=self.bootstap_server,
+            bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
             auto_offset_reset='earliest',
             enable_auto_commit=True,
             value_deserializer=lambda x: x.decode('utf-8')
@@ -39,7 +38,7 @@ class KafkaStreamProducer:
     def __connect_to_kafka(cls):
         try:
             producer = KafkaProducer(
-                bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVER,
+                bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
                 value_serializer=lambda x: x.encode('utf-8')
             )
             
