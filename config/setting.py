@@ -9,7 +9,7 @@ class AppSettings(BaseSettings):
     DATABASE_URL :str = ""
     KAFKA_BOOTSTRAP_SERVERS :str
     KAFKA_TOPIC :str
-    KEYCLOAK_URL :str
+    KEYCLOAK_URL :str = "http://192.168.126.98:8080/"
     KEYCLOAK_REALM :str
     KEYCLOAK_CLIENT_ID :str
     KEYCLOAK_CLIENT_SECRET :str
@@ -19,6 +19,6 @@ class AppSettings(BaseSettings):
     AUDIENCE :str
     ALGORITHM :str
     
-    
     class Config:
         env_file = ".env"
+        

@@ -1,7 +1,7 @@
 from fastapi import HTTPException,status
 from schemas.customer import CustomerIn, CustomerLogin
 from typing import Dict
-from utils import sql,generate
+from utils import sql
 from tools.keycloak import login_keycloak_user,register_keycloak_user
 
 

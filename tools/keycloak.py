@@ -41,8 +41,10 @@ def login_keycloak_admin():
     login admin user and use admin to perform operations
     
     """
+    print(settings.KEYCLOAK_URL)
     
-    url = f"{settings.KEYCLOAK_URL}/realms/{settings.KEYCLOAK_REALM}/protocol/openid-connect/token"
+    url = f"{settings.KEYCLOAK_URL}/{settings.KEYCLOAK_REALM}/protocol/openid-connect/token"
+    print(url)
     payload = {
         "client_id": settings.KEYCLOAK_CLIENT_ID,
         "client_secret": settings.KEYCLOAK_CLIENT_SECRET,
@@ -50,6 +52,9 @@ def login_keycloak_admin():
         "password": settings.KEYCLOAK_ADMIN_PASSWORD,
         "grant_type": "password"
     }
+    
+    print(payload)
+    
     try:
         response = requests.post(url, data=payload)
         return response.json()
@@ -60,11 +65,15 @@ def login_keycloak_admin():
 
 
 
-#admin_token = login_keycloak_admin()
-#access_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("expires_in", 0))
-#refresh_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("refresh_expires_in", 0))
+admin_token = login_keycloak_admin()
+access_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("expires_in", 0))
+refresh_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("refresh_expires_in", 0))
 
-
+print(admin_token)
+print("##################################")
+print(access_token_expire_date)
+print("##################################")
+print(refresh_token_expire_date)
 
 def refresh_user_token():
     
