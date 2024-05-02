@@ -13,6 +13,7 @@ from models.customer import Customers
 from models.order import Orders
 from models.orderitem import OrderItem
 from models.product import Products
+from models.category import Category
 
 
 from alembic import context

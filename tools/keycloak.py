@@ -63,6 +63,7 @@ def login_keycloak_admin():
 
 
 admin_token = login_keycloak_admin()
+print(admin_token['access_token'])
 access_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("expires_in", 0))
 refresh_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("refresh_expires_in", 0))
 
