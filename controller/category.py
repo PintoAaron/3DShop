@@ -1,12 +1,12 @@
 from fastapi import HTTPException,status
-from schemas.product import ProductModel
+from schemas.category import CategoryIn
 from utils import sql
 
 
 
 class CategoryController():
     
-    def add_category(category):
+    def add_category(category: CategoryIn):
         """
         Add a category
         """

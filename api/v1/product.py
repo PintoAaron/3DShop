@@ -12,9 +12,8 @@ def add_product(item: ProductModel, token=Header(...)):
     payload = verify_token(token)
     if not payload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid token")
-    # is_admin = check_if_user_is_admin(payload)
-    # if not is_admin:
-    #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="user is not admin")
+    if not check_if_user_is_admin(payload):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="user is not admin")
     product = ProductContoller.add_product(item)
     return product
     

@@ -42,7 +42,7 @@ def get_customer_by_email(email: str):
 
 def save_product_to_db(product: product.ProductModel):  
     with DBSession() as db:
-        category = db.query(Category).filter(Category.name == product.category).first()
+        category = db.query(Category).filter(Category.id == product.category).first()
         if not category:
             return False
     new_product = Products(category=category, **product.dict(exclude={"category"}))
@@ -69,6 +69,7 @@ def update_product_quantity(name: str,quantity: int):
             product = db.query(Products).filter(Products.name == name).first()
             product.quantity = quantity
             db.commit()
+            db.refresh(product)
             return product
     except SQLAlchemyError as e:
         logger.error(f"Error updating product quantity --- {e}")

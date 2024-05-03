@@ -4,15 +4,14 @@ def check_if_user_is_admin(data) -> bool:
     """
     Check if user is admin
     """
-    print("data",data)
-    resource_access = data.get("resource_access")
-    print(resource_access)
+    resource_access = data["resource_access"]
     if resource_access:
-        realm_management = resource_access.get("realm_management")
-        print(realm_management)
+        try:
+            realm_management = resource_access["realm-management"]
+        except KeyError:
+            return False
         if realm_management:
-            roles = realm_management.get("roles")
-            print(roles)
+            roles = realm_management["roles"]
             if roles:
                 if "realm-admin" in roles:
                     return True
