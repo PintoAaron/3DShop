@@ -10,10 +10,10 @@ from core import setup as db_setup
 settings = setting.AppSettings()
 
 from models.customer import Customers
-from models.order import Orders
-from models.orderitem import OrderItem
 from models.product import Products
 from models.category import Category
+from models.order import Orders
+from models.orderitem import OrderItem
 
 
 from alembic import context
@@ -32,7 +32,6 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = db_setup.Base.metadata
-
 
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 # other values from the config, defined by the needs of env.py,

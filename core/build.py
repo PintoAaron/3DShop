@@ -1,7 +1,7 @@
 from fastapi import FastAPI, responses
 from fastapi.middleware.cors import CORSMiddleware
 from core import setup as db_setup
-from api.v1 import auth,product
+from api.v1 import auth,product,category
 
 from config import setting
 
@@ -20,6 +20,8 @@ class AppBuilder():
         self._app.include_router(auth.auth_router, prefix=settings.API_PREFIX)
         
         self._app.include_router(product.product_router, prefix=settings.API_PREFIX)
+        
+        self._app.include_router(category.category_router, prefix=settings.API_PREFIX)
         
         @self._app.get("/",include_in_schema=False)
         def _index():
