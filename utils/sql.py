@@ -6,6 +6,10 @@ from sqlalchemy.exc import SQLAlchemyError
 from schemas import customer,product,category
 from tools.log import Log
 from typing import Union
+from config import setting
+
+
+settings = setting.AppSettings()
 
 
 logger = Log(__name__)
@@ -83,5 +87,20 @@ def save_category_to_db(category: category.CategoryIn) -> Union[bool,Category]:
     except SQLAlchemyError as e:
         logger.error(f"Error saving category to database --- {e}")
         return False
+    
+
+def add_admin_user_to_db():
+    try:
+        with DBSession() as db:
+            admin = db.query(Customers).filter(Customers.email == settings.KEYCLOAK_ADMIN_EMAIL).first()
+            if admin:
+                return "success - admin user already exists"
+            admin = Customers(name=settings.KEYCLOAK_ADMIN_USER, email=settings.KEYCLOAK_ADMIN_EMAIL, is_admin=True)
+            db.add(admin)
+            db.commit()
+            return "success - admin user added"
+    except SQLAlchemyError as e:
+        logger.error(f"Error adding admin user to database --- {e}")
+        return "error - admin user not added"
 
 

@@ -6,16 +6,15 @@ from schemas.token import Token
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 
 
+@auth_router.post("/login", response_model=Token)
+def login(data:CustomerLogin):
+    result = AuthContoller.login(data)
+    return result
 
-@auth_router.post("/login")
-def login(data:CustomerLogin) -> Token:
-    msg = AuthContoller.login(data)
-    return msg
 
-
-@auth_router.post("/register")
-def register(data:CustomerIn) -> Token:
-    msg = AuthContoller.register(data)
-    return msg
+@auth_router.post("/register",response_model=Token)
+def register(data:CustomerIn):
+    result = AuthContoller.register(data)
+    return result
 
     

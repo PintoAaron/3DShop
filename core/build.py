@@ -2,6 +2,7 @@ from fastapi import FastAPI, responses
 from fastapi.middleware.cors import CORSMiddleware
 from core import setup as db_setup
 from api.v1 import auth,product,category
+from utils.sql import add_admin_user_to_db
 
 from config import setting
 
@@ -48,11 +49,17 @@ class AppBuilder():
         db_setup.Base.metadata.create_all(
             bind = db_setup.db.get_engine()
         )
+        
     
+    def register_admin_user(self):
+        add_admin_user_to_db()
+        
     
     def get_app(self):
         self.register_databases()
         self.register_routes()
         self.register_exceptions()
         self.register_middlewares()
+        self.register_admin_user()
+        
         return self._app

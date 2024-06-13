@@ -14,6 +14,7 @@ class AppSettings(BaseSettings):
     KEYCLOAK_CLIENT_ID :str
     KEYCLOAK_CLIENT_SECRET :str
     KEYCLOAK_ADMIN_USER :str
+    KEYCLOAK_ADMIN_EMAIL :str
     KEYCLOAK_ADMIN_PASSWORD :str
     PUBLIC_KEY :str
     AUDIENCE :str
