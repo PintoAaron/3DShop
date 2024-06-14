@@ -15,6 +15,21 @@ settings = setting.AppSettings()
 logger = Log(__name__)
 
 
+def add_admin_user_to_db():
+    try:
+        with DBSession() as db:
+            admin = db.query(Customers).filter(Customers.email == settings.KEYCLOAK_ADMIN_EMAIL).first()
+            if admin:
+                return "success - admin user already exists"
+            admin = Customers(name=settings.KEYCLOAK_ADMIN_USER, email=settings.KEYCLOAK_ADMIN_EMAIL)
+            db.add(admin)
+            db.commit()
+            return "success - admin user added"
+    except SQLAlchemyError as e:
+        logger.error(f"Error adding admin user to database --- {e}")
+        return "error - admin user not added"
+
+
 def add_object_to_database(item: any):
     with DBSession() as db:
         try:
@@ -88,19 +103,65 @@ def save_category_to_db(category: category.CategoryIn) -> Union[bool,Category]:
         logger.error(f"Error saving category to database --- {e}")
         return False
     
-
-def add_admin_user_to_db():
+    
+def get_all_categories():
     try:
         with DBSession() as db:
-            admin = db.query(Customers).filter(Customers.email == settings.KEYCLOAK_ADMIN_EMAIL).first()
-            if admin:
-                return "success - admin user already exists"
-            admin = Customers(name=settings.KEYCLOAK_ADMIN_USER, email=settings.KEYCLOAK_ADMIN_EMAIL, is_admin=True)
-            db.add(admin)
-            db.commit()
-            return "success - admin user added"
+            return db.query(Category).all()
     except SQLAlchemyError as e:
-        logger.error(f"Error adding admin user to database --- {e}")
-        return "error - admin user not added"
+        logger.error(f"Error getting all categories --- {e}")
+        return None
+    
+
+
+def get_category_by_id(cat_id: int):
+    try:
+        with DBSession() as db:
+            return db.query(Category).filter(Category.id == cat_id).first()
+    except SQLAlchemyError as e:
+        logger.error(f"Error getting category by id --- {e}")
+        return None 
+    
+
+
+def update_category(cat_id: int, item: category.CategoryIn):
+    try:
+        with DBSession() as db:
+            category = db.query(Category).filter(Category.id == cat_id).first()
+            if not category:
+                return False
+            category.name = item.name
+            category.description = item.description
+            db.commit()
+            db.refresh(category)
+            return category  
+    except SQLAlchemyError as e:
+        logger.error(f"Error updating category --- {e}")
+        return False
+    
+    
+
+def get_products_by_category(cat_id: int):
+    try:
+        with DBSession() as db:
+            return db.query(Products).filter(Products.category_id == cat_id).all()
+    except SQLAlchemyError as e:
+        logger.error(f"Error getting products by category --- {e}")
+        return None
+    
+    
+def delete_category(cat_id: int):
+    try:
+        with DBSession() as db:
+            category = db.query(Category).filter(Category.id == cat_id).first()
+            if not category:
+                return False
+            db.delete(category)
+            db.commit()
+            return True
+    except SQLAlchemyError as e:
+        logger.error(f"Error deleting category --- {e}")
+        return False
+
 
 
