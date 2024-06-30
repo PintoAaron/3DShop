@@ -1,19 +1,15 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+from typing import Optional, List
+
+from core.setup import Base
 
 
-from core import setup as db_setup 
+class CategoryModel(Base):
+    __tablename__ = 'category'
 
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    description: Mapped[Optional[str]]
 
-class Category(db_setup.Base):
-    __tablename__ = 'categories'
-    
-    id = Column(Integer, primary_key=True)
-    name = Column(String,nullable=False)
-    description = Column(String,nullable=False)
-    products = relationship('Products',back_populates='category')
-    
-    
-    def __str__(self):
-        return self.name
-    
+    products: Mapped[List["ProductModel"]] = relationship(back_populates="category", 
+                                                          passive_deletes="all")

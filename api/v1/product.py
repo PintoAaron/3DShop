@@ -5,7 +5,7 @@ from schemas.product import ProductModel
 from controller.product import ProductContoller
 
 
-product_router = APIRouter(prefix="/products", tags=["product"])
+product_router = APIRouter(prefix="/products", tags=["PRODUCT"])
 
 @product_router.post("/", status_code=status.HTTP_200_OK)
 def add_product(item: ProductModel, token=Header(...)):

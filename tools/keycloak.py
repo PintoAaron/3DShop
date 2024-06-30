@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from config import setting
-from schemas.customer import CustomerLogin, CustomerIn
+from schemas.user import UserLogin, UserIn
 from .log import Log
 import requests
 
@@ -10,7 +10,7 @@ settings = setting.AppSettings()
 
 logger = Log(__name__)
 
-def login_keycloak_user(user: CustomerLogin):
+def login_keycloak_user(user: UserLogin):
     
     """
     login a user in keycloak
@@ -29,7 +29,6 @@ def login_keycloak_user(user: CustomerLogin):
         response = requests.post(url, data=payload)
         return response.json() if response.status_code == 200 else None
     except Exception as e:
-        print(f"Error login_keycloak_user: {e}")        
         logger.error(f"Error login_keycloak_user: {e}")
         return None
 
@@ -62,7 +61,7 @@ def login_keycloak_admin():
 
 
 
-admin_token = login_keycloak_admin()
+admin_token: dict = login_keycloak_admin()
 print(admin_token)
 access_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("expires_in", 0))
 refresh_token_expire_date = datetime.now() + timedelta(seconds=admin_token.get("refresh_expires_in", 0))
@@ -84,7 +83,6 @@ def refresh_user_token():
         response = requests.post(url, data=payload)
         return response.json()
     except Exception as e:
-        print(f"Error refresh_user_token: {e}")        
         logger.error(f"Error refresh_user_token: {e}")
         return None
     
@@ -112,7 +110,7 @@ def refresh_or_get_new_admin_token():
 
 
 
-def register_keycloak_user(user: CustomerIn):
+def register_keycloak_user(user: UserIn):
     
     """
     Register a user in keycloak
@@ -149,7 +147,6 @@ def register_keycloak_user(user: CustomerIn):
         response = requests.post(url, headers=headers, json=payload)
         return True if response.status_code == 201 else None
     except Exception as e:
-        print(f"Error register_keycloak_user: {e}")
         logger.error(f"Error register_keycloak_user: {e}")
         return None
     
@@ -165,6 +162,5 @@ def verify_token(token: str):
         payload = jwt.decode(token,key=DECODE_KEY,audience=settings.AUDIENCE,algorithms=[settings.ALGORITHM])
         return payload
     except JWTError as e:
-        print(f"Error verify_token: {e}")
         logger.error(f"Error verify_token: {e}")
         return None

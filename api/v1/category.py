@@ -6,7 +6,7 @@ from utils.checker import check_if_user_is_admin
 from typing import List
 
 
-category_router = APIRouter(prefix="/categories", tags=["category"])
+category_router = APIRouter(prefix="/categories", tags=["CATEGORY"])
 
 
 @category_router.post("/",status_code=status.HTTP_200_OK)

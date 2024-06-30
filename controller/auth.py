@@ -1,42 +1,37 @@
-from fastapi import HTTPException,status
-from schemas.customer import CustomerIn, CustomerLogin, DbCustomer
+from fastapi import HTTPException, status
+from schemas.user import UserIn, UserLogin, DbUser
 from schemas.token import Token
 from typing import Dict
 from utils import sql
-from tools.keycloak import login_keycloak_user,register_keycloak_user,verify_token
+from tools.keycloak import login_keycloak_user, register_keycloak_user, verify_token
 from utils.checker import check_if_user_is_admin
 
 
 class AuthContoller:
-    
+
     @classmethod
-    def login(cls,customer: CustomerLogin) -> Token:
-        if sql.get_customer_by_email(customer.email):
+    def login(cls, customer: UserLogin) -> Token:
+        if sql.get_user_by_email(customer.email):
             token = login_keycloak_user(customer)
             if token:
                 return Token(**token)
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="invalid password")
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="no account found")
-        
-        
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid password")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="no account found")
 
     @classmethod
-    def register(cls,customer: CustomerIn) -> Token:
-        if sql.get_customer_by_email(customer.email):
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="email already exists")
+    def register(cls, customer: UserIn) -> Token:
+        if sql.get_user_by_email(customer.email):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="email already exists")
         if register_keycloak_user(customer):
-            if sql.save_customer_to_db(DbCustomer(name=customer.name,email=customer.email)):
-                token = cls.login(CustomerLogin(email=customer.email,password=customer.password))
+            if sql.save_user_to_db(DbUser(name=customer.name, email=customer.email)):
+                token = cls.login(UserLogin(
+                    email=customer.email, password=customer.password))
                 return token
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="unable to register customer")
-        
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="unable to register customer")
-    
-    
-    @classmethod
-    def check_if_user_is_admin(cls,token: str) -> Dict:
-        payload = verify_token(token)
-        if not payload:
-            return False
-        return check_if_user_is_admin(payload)
-        
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="unable to register customer")
+
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="unable to register customer")
