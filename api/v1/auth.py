@@ -1,19 +1,18 @@
 from fastapi import APIRouter
 from controller.auth import AuthContoller
-from schemas.customer import CustomerIn, CustomerLogin
+from schemas.user import UserIn, UserLogin
+from schemas.token import Token
 
-auth_router = APIRouter(prefix="/auth", tags=["auth"])
-
-
-
-@auth_router.post("/login")
-def login(data:CustomerLogin):
-    msg = AuthContoller.login(data)
-    return msg
+auth_router = APIRouter(prefix="/auth", tags=["AUTHENTICATION"])
 
 
-@auth_router.post("/register")
-def register(data:CustomerIn):
-    msg = AuthContoller.register(data)
-    return msg
-    
+@auth_router.post("/login", response_model=Token)
+def login_user(data:UserLogin):
+    result = AuthContoller.login(data)
+    return result
+
+
+@auth_router.post("/register",response_model=Token)
+def register_user(data:UserIn):
+    result = AuthContoller.register(data)
+    return result

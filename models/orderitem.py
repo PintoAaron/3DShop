@@ -1,21 +1,20 @@
-import sqlalchemy as sq
-from sqlalchemy import Column, Integer, String, Float
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import ForeignKey
 
-from core import setup as db_setup
+from core.setup import Base
 
 
+class OrderItemModel(Base):
+    __tablename__ = 'order_item'
 
-class OrderItem(db_setup.Base):
-    __tablename__ = 'order_items'
-    
-    id = Column(Integer, primary_key=True)
-    order_id = Column(String, sq.ForeignKey('orders.order_id'))
-    product_id = Column(Integer, sq.ForeignKey('products.id'))
-    quantity = Column(Integer,nullable=False)
-    price = Column(Float,nullable=False)
-    order = relationship('Orders',back_populates='order_items')
-    product = relationship('Products',back_populates='order_items')
-    
-    def __str__(self):
-        return f'{self.product.name} - {self.quantity} - {self.price}' 
+    id: Mapped[int] = mapped_column(primary_key=True)
+    order_id: Mapped[UUID] = mapped_column(ForeignKey("orders.id", ondelete="RESTRICT"))
+    product_id: Mapped[int] = mapped_column(ForeignKey("product.id", ondelete="RESTRICT"))
+    quantity: Mapped[int]
+    price: Mapped[float]
+
+    order: Mapped["OrderModel"] = relationship(back_populates="order_items", 
+                                               passive_deletes="all")
+    product: Mapped["ProductModel"] = relationship(back_populates="order_items", 
+                                                   passive_deletes="all")
