@@ -3,7 +3,8 @@ from schemas.customer import CustomerIn, CustomerLogin, DbCustomer
 from schemas.token import Token
 from typing import Dict
 from utils import sql
-from tools.keycloak import login_keycloak_user,register_keycloak_user
+from tools.keycloak import login_keycloak_user,register_keycloak_user,verify_token
+from utils.checker import check_if_user_is_admin
 
 
 class AuthContoller:
@@ -31,3 +32,11 @@ class AuthContoller:
         
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="unable to register customer")
     
+    
+    @classmethod
+    def check_if_user_is_admin(cls,token: str) -> Dict:
+        payload = verify_token(token)
+        if not payload:
+            return False
+        return check_if_user_is_admin(payload)
+        

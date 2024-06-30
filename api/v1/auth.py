@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Header
 from controller.auth import AuthContoller
 from schemas.customer import CustomerIn, CustomerLogin
 from schemas.token import Token
@@ -16,5 +16,3 @@ def login(data:CustomerLogin):
 def register(data:CustomerIn):
     result = AuthContoller.register(data)
     return result
-
-    
