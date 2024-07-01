@@ -1,10 +1,8 @@
 from fastapi import HTTPException, status
 from schemas.user import UserIn, UserLogin, DbUser
 from schemas.token import Token
-from typing import Dict
 from utils import sql
-from tools.keycloak import login_keycloak_user, register_keycloak_user, verify_token
-from utils.checker import check_if_user_is_admin
+from tools.keycloak import login_keycloak_user, register_keycloak_user
 
 
 class AuthContoller:

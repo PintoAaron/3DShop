@@ -11,5 +11,5 @@ class CategoryModel(Base):
     name: Mapped[str]
     description: Mapped[Optional[str]]
 
-    products: Mapped[List["ProductModel"]] = relationship(back_populates="category", 
+    products: Mapped[List["ProductModel"]] = relationship(back_populates="category",
                                                           passive_deletes="all")

@@ -21,5 +21,5 @@ class UserModel(Base):
     role: Mapped[RoleType] = mapped_column(Enum(RoleType), default=RoleType.staff)
     date_joined: Mapped[datetime] = mapped_column(insert_default=func.now())
 
-    orders: Mapped[List["OrderModel"]] = relationship(back_populates='user', 
+    orders: Mapped[List["OrderModel"]] = relationship(back_populates='user',
                                                       passive_deletes="all")

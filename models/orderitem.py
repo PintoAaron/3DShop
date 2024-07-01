@@ -10,11 +10,12 @@ class OrderItemModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     order_id: Mapped[UUID] = mapped_column(ForeignKey("orders.id", ondelete="RESTRICT"))
-    product_id: Mapped[int] = mapped_column(ForeignKey("product.id", ondelete="RESTRICT"))
+    product_id: Mapped[int] = mapped_column(
+        ForeignKey("product.id", ondelete="RESTRICT"))
     quantity: Mapped[int]
     price: Mapped[float]
 
-    order: Mapped["OrderModel"] = relationship(back_populates="order_items", 
+    order: Mapped["OrderModel"] = relationship(back_populates="order_items",
                                                passive_deletes="all")
-    product: Mapped["ProductModel"] = relationship(back_populates="order_items", 
+    product: Mapped["ProductModel"] = relationship(back_populates="order_items",
                                                    passive_deletes="all")

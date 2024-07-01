@@ -13,12 +13,13 @@ class ProductModel(Base):
     name: Mapped[str]
     price: Mapped[float]
     quantity: Mapped[int]
-    category_id: Mapped[int] = mapped_column(ForeignKey("category.id", ondelete="RESTRICT"))
+    category_id: Mapped[int] = mapped_column(
+        ForeignKey("category.id", ondelete="RESTRICT"))
     date_created: Mapped[datetime] = mapped_column(insert_default=func.now())
 
-    order_items: Mapped["OrderItemModel"] = relationship(back_populates="product", 
+    order_items: Mapped["OrderItemModel"] = relationship(back_populates="product",
                                                          passive_deletes="all")
-    category: Mapped["CategoryModel"] = relationship(back_populates="products", 
+    category: Mapped["CategoryModel"] = relationship(back_populates="products",
                                                      passive_deletes="all")
-    images: Mapped[List["ProductImageModel"]] = relationship(back_populates="product", 
+    images: Mapped[List["ProductImageModel"]] = relationship(back_populates="product",
                                                              passive_deletes="all")

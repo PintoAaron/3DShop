@@ -10,7 +10,9 @@ class ProductImageModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     image_url: Mapped[str]
-    product_id: Mapped[int] = mapped_column(ForeignKey("product.id", ondelete="CASCADE"))
+    product_id: Mapped[int] = mapped_column(
+        ForeignKey("product.id", ondelete="CASCADE"))
     created_at: Mapped[datetime] = mapped_column(insert_default=func.now())
 
-    product: Mapped["ProductModel"] = relationship(back_populates="images", passive_deletes="all")
+    product: Mapped["ProductModel"] = relationship(
+        back_populates="images", passive_deletes="all")

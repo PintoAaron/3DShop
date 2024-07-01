@@ -7,12 +7,12 @@ auth_router = APIRouter(prefix="/auth", tags=["AUTHENTICATION"])
 
 
 @auth_router.post("/login", response_model=Token)
-def login_user(data:UserLogin):
+def login_user(data: UserLogin):
     result = AuthContoller.login(data)
     return result
 
 
-@auth_router.post("/register",response_model=Token)
-def register_user(data:UserIn):
+@auth_router.post("/register", response_model=Token)
+def register_user(data: UserIn):
     result = AuthContoller.register(data)
     return result
